@@ -29,11 +29,11 @@ jobs:
 
       - name: 构建 APK
         run: |
-          flet build apk \
-            --app-name "就业信息采集" \
-            --package-name "com.jobscraper.app" \
-            --product-name "就业信息采集" \
-            --org "jobscraper" \
+          flet build apk . \
+            --project "jobscraper" \
+            --product "就业信息采集" \
+            --bundle-id "com.jobscraper.app" \
+            --org "com.jobscraper" \
             --module-name flet_app
 
       - name: 上传 APK
