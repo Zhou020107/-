@@ -34,7 +34,9 @@ jobs:
             --product "就业信息采集" \
             --bundle-id "com.jobscraper.app" \
             --org "com.jobscraper" \
-            --module-name flet_app
+            --module-name flet_app \
+            --yes \
+            --no-rich-output
 
       - name: 上传 APK
         uses: actions/upload-artifact@v4
