@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: 就业信息采集-APK
-          path: build/apk/release/*.apk
+          path: build/**/*.apk
           retention-days: 30
 
       - name: 恢复根目录依赖文件
