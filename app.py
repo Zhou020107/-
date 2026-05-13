@@ -4,7 +4,7 @@ from storage.database import Database
 from ui import search_tab, browse_tab, charts_tab, export_tab
 
 st.set_page_config(
-    page_title="职位信息采集工具",
+    page_title="就业查询",
     page_icon="🔍",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -50,7 +50,7 @@ if 'db' not in st.session_state:
 
 # 侧边栏
 with st.sidebar:
-    st.title("🔍 职位采集工具")
+    st.title("🔍 就业查询")
 
     # 数据概览
     st.subheader("📊 数据概览")
@@ -89,7 +89,7 @@ with st.sidebar:
     st.caption(f"本地访问: http://localhost:8501")
 
 # 主界面
-st.title("🔍 职位信息采集工具")
+st.title("🔍 就业查询")
 
 # 四个选项卡
 tab1, tab2, tab3, tab4 = st.tabs([
