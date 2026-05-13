@@ -30,8 +30,8 @@ sites:
 # 爬取限制
 scraping:
   max_pages_per_site: 10        # 每个网站最多爬取页数
-  min_delay_seconds: 3          # 请求间隔最小秒数
-  max_delay_seconds: 8          # 请求间隔最大秒数
+  min_delay_seconds: 1          # 请求间隔最小秒数
+  max_delay_seconds: 3          # 请求间隔最大秒数
   timeout_seconds: 30           # 请求超时秒数
 
 # 默认搜索参数
