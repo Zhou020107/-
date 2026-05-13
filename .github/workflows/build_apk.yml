@@ -27,6 +27,11 @@ jobs:
         run: |
           pip install -r flet_mobile/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 
+      - name: 替换为移动端依赖（移除playwright）
+        run: |
+          cp requirements.txt requirements_streamlit.txt
+          cp flet_mobile/requirements.txt requirements.txt
+
       - name: 构建 APK
         run: |
           flet build apk . \
@@ -44,3 +49,8 @@ jobs:
           name: 就业信息采集-APK
           path: build/apk/release/*.apk
           retention-days: 30
+
+      - name: 恢复根目录依赖文件
+        if: always()
+        run: |
+          cp requirements_streamlit.txt requirements.txt
