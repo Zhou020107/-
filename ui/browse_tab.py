@@ -39,26 +39,72 @@ def render():
         st.metric("五险一金",
                   filtered['has_insurance'].sum() if 'has_insurance' in filtered.columns else 0)
 
+    # 快速排序按钮
+    if 'browse_sort_by' not in st.session_state:
+        st.session_state.browse_sort_by = 'salary_min'
+        st.session_state.browse_sort_asc = False
+
+    st.write("**排序方式**")
+    scol1, scol2, scol3, scol4, scol5, scol6 = st.columns(6)
+
+    with scol1:
+        if st.button("💰 薪资↓", use_container_width=True, key="s_btn1"):
+            st.session_state.browse_sort_by = 'salary_min'
+            st.session_state.browse_sort_asc = False
+    with scol2:
+        if st.button("💰 薪资↑", use_container_width=True, key="s_btn2"):
+            st.session_state.browse_sort_by = 'salary_min'
+            st.session_state.browse_sort_asc = True
+    with scol3:
+        if st.button("📅 最新", use_container_width=True, key="s_btn3"):
+            st.session_state.browse_sort_by = 'post_date'
+            st.session_state.browse_sort_asc = False
+    with scol4:
+        if st.button("🏢 公司", use_container_width=True, key="s_btn4"):
+            st.session_state.browse_sort_by = 'company'
+            st.session_state.browse_sort_asc = True
+    with scol5:
+        if st.button("🎓 学历", use_container_width=True, key="s_btn5"):
+            st.session_state.browse_sort_by = 'education'
+            st.session_state.browse_sort_asc = True
+    with scol6:
+        if st.button("📍 地点", use_container_width=True, key="s_btn6"):
+            st.session_state.browse_sort_by = 'location'
+            st.session_state.browse_sort_asc = True
+
     # 数据表格
-    display_cols = ['title', 'company', 'location', 'location_tier', 'salary_text',
-                    'salary_range', 'education', 'is_accept_graduate',
-                    'has_insurance', 'has_weekend_off', 'tech_stack', 'source', 'post_date']
+    display_cols = ['title', 'company', 'salary_text', 'location', 'location_tier',
+                    'education', 'is_accept_graduate', 'has_insurance', 'has_weekend_off',
+                    'tech_stack', 'source', 'post_date']
     display_cols = [c for c in display_cols if c in filtered.columns]
     column_names = {
-        'title': '职位名称', 'company': '公司', 'location': '工作地点',
-        'location_tier': '城市等级', 'salary_text': '薪资原文',
-        'salary_range': '薪资档位', 'education': '学历要求',
-        'is_accept_graduate': '招应届', 'has_insurance': '五险一金',
-        'has_weekend_off': '双休', 'tech_stack': '技术栈',
-        'source': '来源网站', 'post_date': '发布日期',
+        'title': '职位名称', 'company': '公司', 'salary_text': '薪资',
+        'location': '工作地点', 'location_tier': '城市等级',
+        'education': '学历要求', 'is_accept_graduate': '招应届',
+        'has_insurance': '五险一金', 'has_weekend_off': '双休',
+        'tech_stack': '技术栈', 'source': '来源网站', 'post_date': '发布日期',
     }
-    # 将布尔列转为勾号
+
+    # 排序
+    sort_col = st.session_state.browse_sort_by
+    sort_asc = st.session_state.browse_sort_asc
+    if sort_col in filtered.columns:
+        filtered = filtered.sort_values(sort_col, ascending=sort_asc)
+
+    # 布尔列转勾号
     bool_cols = ['is_accept_graduate', 'has_insurance', 'has_weekend_off']
     for bc in bool_cols:
         if bc in filtered.columns:
             filtered[bc] = filtered[bc].apply(lambda x: '✅' if x else '')
+
     renamed = filtered[display_cols].rename(columns=column_names)
-    st.dataframe(renamed, use_container_width=True, hide_index=True)
+    st.dataframe(renamed, use_container_width=True, hide_index=True,
+                 column_config={
+                     '职位名称': st.column_config.TextColumn(width='medium'),
+                     '薪资': st.column_config.TextColumn(width='small'),
+                     '工作地点': st.column_config.TextColumn(width='small'),
+                     '技术栈': st.column_config.TextColumn(width='medium'),
+                 })
 
     # 详情查看
     st.subheader("🔍 查看详情")
@@ -142,15 +188,11 @@ def _show_job_detail(job):
     ]
 
     for col_key, col_label in cols:
-        if col_key in job.index and job[col_key] is not None:
+        if col_key in job.index and job[col_key] is not None and job[col_key] != '':
             val = job[col_key]
             if col_key.startswith('is_') or col_key.startswith('has_'):
-                val = '✅ 是' if val else '❌ 否'
+                val = '✅ 是' if val in (True, 1, '1', 'True') else '❌ 否'
             st.write(f"**{col_label}**: {val}")
-
-    for col_key, col_label in cols:
-        if col_key in job.index and job[col_key]:
-            st.write(f"**{col_label}**: {job[col_key]}")
 
     if 'description' in job.index and job['description']:
         with st.expander("📝 职位描述"):
