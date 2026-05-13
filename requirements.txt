@@ -1,0 +1,26 @@
+# 核心
+streamlit>=1.40.0
+pandas>=2.2.0
+numpy>=1.26.0
+
+# 爬虫
+httpx>=0.27.0
+beautifulsoup4>=4.12.0
+lxml>=5.1.0
+playwright>=1.48.0
+playwright-stealth>=1.0.6
+
+# Excel 导出
+openpyxl>=3.1.0
+
+# 图表
+plotly>=5.22.0
+
+# 中文处理
+jieba>=0.42.1
+
+# 配置
+PyYAML>=6.0
+
+# 工具
+python-dateutil>=2.9.0

@@ -1,0 +1,46 @@
+# 职位爬虫工具配置文件
+# 修改此文件后重启应用即可生效
+
+# 目标网站设置
+sites:
+  51job:
+    enabled: true
+    base_url: "https://we.51job.com"
+    encoding: "utf-8"
+    use_browser: true
+
+  ncss:
+    enabled: true
+    base_url: "https://24365.smartedu.cn"
+    encoding: "utf-8"
+    use_browser: false
+
+  boss_zhipin:
+    enabled: false
+    base_url: "https://www.zhipin.com"
+    encoding: "utf-8"
+    use_browser: true
+
+  zhilian:
+    enabled: false
+    base_url: "https://www.zhaopin.com"
+    encoding: "utf-8"
+    use_browser: true
+
+# 爬取限制
+scraping:
+  max_pages_per_site: 10        # 每个网站最多爬取页数
+  min_delay_seconds: 3          # 请求间隔最小秒数
+  max_delay_seconds: 8          # 请求间隔最大秒数
+  timeout_seconds: 30           # 请求超时秒数
+
+# 默认搜索参数
+defaults:
+  max_pages: 5                  # 默认爬取页数
+  location: ""                  # 默认地点（留空=全国）
+
+# 反检测设置
+stealth:
+  headless: true                # 是否使用无头浏览器
+  rotate_user_agent: true       # 是否轮换 User-Agent
+  simulate_human: true          # 是否模拟人类操作延迟

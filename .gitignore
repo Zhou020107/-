@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+job_data.db
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+.env
+*.log
+test_*.py
+ncss_body.txt
+.streamlit/
+.claude/

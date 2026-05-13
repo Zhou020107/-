@@ -1,0 +1,17 @@
+[build]
+app_name = "就业信息采集"
+app_short_name = "就业采集"
+package_name = "com.jobscraper.app"
+version = "1.0.0"
+build_number = 1
+
+[android]
+permissions = ["INTERNET"]
+min_sdk_version = 21
+target_sdk_version = 34
+
+[python]
+version = "3.11"
+
+[assets]
+include = ["../scraper/**/*.py", "../classifier/**/*.py", "../storage/**/*.py", "../export/**/*.py", "../models/**/*.py", "../utils/**/*.py"]
