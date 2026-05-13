@@ -65,7 +65,7 @@ def _do_search(keyword: str, location: str, max_pages: int, sites: list):
         item['location_tier'] = tier
 
         item['tech_stack'] = detect_tech_stack(
-            item.get('title', ''), item.get('description', '')
+            item.get('title', ''), item.get('description', ''), keyword=keyword
         )
         item['tech_stack'] = ','.join(item['tech_stack']) if item.get('tech_stack') else ''
 
