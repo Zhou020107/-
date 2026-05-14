@@ -1,6 +1,5 @@
 import re
 import os
-import yaml
 
 # ── 技术栈关键词词典（领域 → 关键词列表）──
 TECH_KEYWORDS = {
@@ -143,6 +142,10 @@ FIELD_TO_CATEGORIES = {
 
 def _load_custom_keywords():
     """从 config.yaml 加载自定义技术栈关键词"""
+    try:
+        import yaml
+    except ImportError:
+        return {}
     config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.yaml')
     try:
         with open(config_path, 'r', encoding='utf-8') as f:

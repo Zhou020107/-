@@ -1,34 +1,51 @@
 """
-就业信息采集 App — Flet 版本
-可在 PC 和 Android 上运行，打包为 APK
-打包入口文件，位于项目根目录以便直接 import 所有模块
+就业信息采集 App — Flet 版本，PC 和 Android 通用
 """
 import os
 import tempfile
+import traceback
 from datetime import datetime
 
 import flet as ft
 
-from scraper.ncss import NCSSScraper
-from classifier import (
-    classify_education, parse_salary, classify_salary_range,
-    classify_location, detect_tech_stack, detect_welfare
-)
-from storage.database import Database
-from export.excel import export_to_excel
+# ── 延迟导入，避免模块级 C 扩展崩溃导致白屏 ──
+NCSSScraper = None
+classify_education = parse_salary = classify_salary_range = None
+classify_location = detect_tech_stack = detect_welfare = None
+Database = None
+export_to_excel = None
+db = None
+
+_startup_error = None
+
+try:
+    from scraper.ncss import NCSSScraper
+    from classifier import (
+        classify_education, parse_salary, classify_salary_range,
+        classify_location, detect_tech_stack, detect_welfare
+    )
+    from storage.database import Database
+    from export.excel import export_to_excel
+    db = Database()
+    db.init()
+except Exception as e:
+    _startup_error = f"启动失败:\n{traceback.format_exc()}"
 
 
-# ── 全局数据库 ──
-db = Database()
-db.init()
+def _error_page(page: ft.Page, msg: str):
+    page.title = "启动错误"
+    page.add(ft.Text("应用启动失败", size=24, color="red", weight=ft.FontWeight.BOLD))
+    page.add(ft.Text(msg, size=12, font_family="monospace"))
 
 
 def main(page: ft.Page):
+    if _startup_error:
+        _error_page(page, _startup_error)
+        return
+
     page.title = "就业信息采集"
     page.theme_mode = ft.ThemeMode.LIGHT
     page.padding = 10
-    page.window.width = 420
-    page.window.height = 800
 
     # ── 状态 ──
     current_tab = 0
@@ -335,4 +352,4 @@ def main(page: ft.Page):
     page.update()
 
 
-ft.app(target=main)
+ft.run(main)

@@ -1,4 +1,3 @@
-import yaml
 import os
 from typing import Generator, Callable
 from utils.logger import setup_logger
@@ -10,8 +9,12 @@ CONFIG_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.y
 
 
 def load_config() -> dict:
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
-        return yaml.safe_load(f)
+    try:
+        import yaml
+        with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+            return yaml.safe_load(f)
+    except (ImportError, FileNotFoundError):
+        return {}
 
 
 class ScraperManager:
